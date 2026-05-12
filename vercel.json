@@ -1,0 +1,7 @@
+{
+  "crons": [
+    { "path": "/api/cron/featured-listing-expiry", "schedule": "0 * * * *" },
+    { "path": "/api/cron/low-stock-alert", "schedule": "0 */2 * * *" },
+    { "path": "/api/cron/order-auto-complete", "schedule": "0 9 * * *" }
+  ]
+}
