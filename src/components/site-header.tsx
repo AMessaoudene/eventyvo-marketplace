@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ShoppingBag, Store, User, Search } from "lucide-react";
+import { InboxDeeplinkBell } from "@/components/inbox-deeplink-bell";
 import { useCart } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,7 @@ export function SiteHeader() {
           </Button>
         </form>
         <nav className="ml-auto flex items-center gap-1 sm:gap-2">
+          <InboxDeeplinkBell />
           <Button variant="ghost" size="sm" asChild>
             <Link href="/categories">Categories</Link>
           </Button>
