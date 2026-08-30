@@ -4,16 +4,65 @@ import { getProductBySlug } from "@/data/catalog";
 import { AddToCart } from "@/components/add-to-cart";
 import { ProductReviews } from "@/components/product-reviews";
 import { Button } from "@/components/ui/button";
+import { StructuredData, buildProductSchema } from "@/components/StructuredData";
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
+  if (!product) return {};
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://marketplace.eventyvo.com");
+
+  const productUrl = `${baseUrl}/products/${slug}`;
+
+  return {
+    title: `${product.title} | Eventyvo Marketplace`,
+    description: product.description,
+    openGraph: {
+      type: "product",
+      url: productUrl,
+      title: product.title,
+      description: product.description,
+      siteName: "Eventyvo Marketplace",
+      images: [
+        {
+          url: `${baseUrl}/products/${slug}/image`,
+          width: 1200,
+          height: 630,
+          alt: product.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: product.description,
+      images: [`${baseUrl}/products/${slug}/image`],
+    },
+  };
+}
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://marketplace.eventyvo.com");
+
+  const productSchema = buildProductSchema(product, baseUrl);
+
   return (
-    <div className="mx-auto max-w-4xl space-y-8 px-4 py-8">
+    <>
+      <StructuredData type="Product" data={productSchema} />
+      <div className="mx-auto max-w-4xl space-y-8 px-4 py-8">
       <Link href="/" className="text-sm text-primary hover:underline">
         ← Back to listings
       </Link>
@@ -44,5 +93,6 @@ export default async function ProductPage({ params }: Props) {
       </div>
       <ProductReviews product={product} />
     </div>
+    </>
   );
 }
