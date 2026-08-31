@@ -15,8 +15,8 @@ export const SYNC_REGISTRY: SyncTarget[] = [
   {
     id: "catalog-b2b",
     label: "Push product catalog to eventyvo-b2b marketplace module",
-    service: "Internal webhook or queue consumed by eventyvo-b2b",
-    status: "planned",
+    service: "GET /api/partner/orders + B2B Integrations pull",
+    status: "live",
   },
 ];
 

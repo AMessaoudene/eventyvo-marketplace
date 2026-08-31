@@ -52,7 +52,7 @@ export default function CheckoutPage() {
       await fetch("/api/sync/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId: order.id }),
+        body: JSON.stringify(order),
       });
     } catch {
       /* non-fatal */
